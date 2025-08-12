@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Cartas - Carioca Online</title>
+    <link rel="stylesheet" href="css/test-cartas.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="index.html" class="back-btn">
+                ← Volver al Menú Principal
+            </a>
+            <h1>🃏 Test de Cartas - Carioca Online 🃏</h1>
+            <p>Prueba y visualiza todas las cartas del juego</p>
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <label for="cardSize">Tamaño de Cartas:</label>
+                <select id="cardSize">
+                    <option value="small">Pequeño</option>
+                    <option value="normal" selected>Normal</option>
+                    <option value="large">Grande</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="filterSuit">Filtrar por Palo:</label>
+                <select id="filterSuit">
+                    <option value="all">Todos</option>
+                    <option value="corazones">Corazones ♥</option>
+                    <option value="diamantes">Diamantes ♦</option>
+                    <option value="treboles">Tréboles ♣</option>
+                    <option value="espadas">Picas ♠</option>
+                    <option value="comodines">Comodines 🃏</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="displayMode">Modo de Visualización:</label>
+                <select id="displayMode">
+                    <option value="png" selected>Imágenes PNG</option>
+                    <option value="css">Cartas CSS</option>
+                    <option value="both">Ambos</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <button id="shuffleBtn" class="btn">🔄 Mezclar Cartas</button>
+                <button id="resetBtn" class="btn">♻️ Resetear Vista</button>
+                <button id="testDealBtn" class="btn">🎯 Repartir Mano de Prueba</button>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <span class="stat-label">Total de Cartas:</span>
+                <span class="stat-value" id="totalCards">112</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Cartas Mostradas:</span>
+                <span class="stat-value" id="visibleCards">112</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Cartas PNG Encontradas:</span>
+                <span class="stat-value" id="foundPngCards">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Cartas Faltantes:</span>
+                <span class="stat-value" id="missingCards">0</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔍 Información del Test</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>📊 Composición del Mazo</h3>
+                    <ul>
+                        <li><strong>2 mazos completos:</strong> 104 cartas</li>
+                        <li><strong>8 comodines:</strong> 4 por mazo</li>
+                        <li><strong>Total:</strong> 112 cartas</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h3>🎨 Tipos de Visualización</h3>
+                    <ul>
+                        <li><strong>PNG:</strong> Imágenes reales de cartas</li>
+                        <li><strong>CSS:</strong> Cartas generadas con código</li>
+                        <li><strong>Ambos:</strong> Comparación lado a lado</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h3>🃏 Palos Disponibles</h3>
+                    <ul>
+                        <li><strong>♥ Corazones:</strong> 26 cartas (2 mazos)</li>
+                        <li><strong>♦ Diamantes:</strong> 26 cartas (2 mazos)</li>
+                        <li><strong>♣ Tréboles:</strong> 26 cartas (2 mazos)</li>
+                        <li><strong>♠ Picas:</strong> 26 cartas (2 mazos)</li>
+                        <li><strong>🃏 Comodines:</strong> 8 cartas</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Mano de Prueba</h2>
+            <div id="testHand" class="test-hand">
+                <p class="test-hand-message">Haz clic en "Repartir Mano de Prueba" para ver una mano de 11 cartas</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🃏 Todas las Cartas</h2>
+            <div class="cards-container" id="cardsContainer">
+                <!-- Las cartas se generarán dinámicamente -->
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>⚠️ Cartas Faltantes</h2>
+            <div id="missingCardsContainer" class="missing-cards">
+                <!-- Se mostrarán las cartas que no tienen imagen PNG -->
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📝 Log de Pruebas</h2>
+            <div class="log-container">
+                <div id="testLog" class="test-log">
+                    <p class="log-entry">Sistema de test iniciado...</p>
+                </div>
+                <button id="clearLogBtn" class="btn btn-secondary">🗑️ Limpiar Log</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/card-manager.js"></script>
+    <script src="js/test-cartas.js"></script>
+</body>
+</html>

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - Carioca Online</title>
+    <link rel="stylesheet" href="css/perfil.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="profile-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <button class="btn-back" onclick="window.location.href='lobby.html'">
+                        <i class="fas fa-arrow-left"></i>
+                        Volver al Lobby
+                    </button>
+                </div>
+                <h1 class="page-title">Mi Perfil</h1>
+                <div class="header-right">
+                    <button class="btn-logout" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Cerrar Sesión
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="profile-main">
+            <!-- Información del Usuario -->
+            <section class="user-info">
+                <div class="user-avatar">
+                    <div class="avatar-circle">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <button class="change-avatar-btn">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                </div>
+                
+                <div class="user-details">
+                    <h2 id="userName" class="user-name">Cargando...</h2>
+                    <p id="userEmail" class="user-email">usuario@ejemplo.com</p>
+                    <p id="userJoinDate" class="user-join-date">Miembro desde: <span>-</span></p>
+                    <div id="guestBadge" class="guest-badge" style="display: none;">
+                        <i class="fas fa-user-secret"></i>
+                        Usuario Invitado
+                    </div>
+                </div>
+            </section>
+
+            <!-- Estadísticas -->
+            <section class="stats-section">
+                <h3 class="section-title">
+                    <i class="fas fa-chart-bar"></i>
+                    Estadísticas de Juego
+                </h3>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" id="victoriasCount">0</span>
+                            <span class="stat-label">Victorias</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-times"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" id="derrotasCount">0</span>
+                            <span class="stat-label">Derrotas</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" id="partidasCount">0</span>
+                            <span class="stat-label">Partidas</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" id="winratePercent">0%</span>
+                            <span class="stat-label">% Victorias</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" id="puntosCount">0</span>
+                            <span class="stat-label">Puntos Totales</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-medal"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" id="rankingPosition">-</span>
+                            <span class="stat-label">Ranking</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Logros -->
+            <section class="achievements-section">
+                <h3 class="section-title">
+                    <i class="fas fa-award"></i>
+                    Logros
+                </h3>
+                
+                <div id="achievementsList" class="achievements-grid">
+                    <!-- Los logros se cargarán dinámicamente -->
+                    <div class="achievement-placeholder">
+                        <i class="fas fa-clock"></i>
+                        <p>Cargando logros...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Historial de Partidas -->
+            <section class="history-section">
+                <h3 class="section-title">
+                    <i class="fas fa-history"></i>
+                    Historial Reciente
+                </h3>
+                
+                <div id="gameHistoryList" class="history-list">
+                    <!-- El historial se cargará dinámicamente -->
+                    <div class="history-placeholder">
+                        <i class="fas fa-clock"></i>
+                        <p>Cargando historial...</p>
+                    </div>
+                </div>
+                
+                <button class="btn btn-secondary" id="loadMoreHistory">
+                    Cargar Más
+                </button>
+            </section>
+
+            <!-- Configuración de Cuenta -->
+            <section class="account-section" id="accountSection">
+                <h3 class="section-title">
+                    <i class="fas fa-cog"></i>
+                    Configuración de Cuenta
+                </h3>
+                
+                <div class="account-options">
+                    <button class="btn btn-outline" id="changePasswordBtn">
+                        <i class="fas fa-key"></i>
+                        Cambiar Contraseña
+                    </button>
+                    
+                    <button class="btn btn-outline" id="changeEmailBtn">
+                        <i class="fas fa-envelope"></i>
+                        Cambiar Email
+                    </button>
+                    
+                    <button class="btn btn-danger" id="deleteAccountBtn">
+                        <i class="fas fa-trash"></i>
+                        Eliminar Cuenta
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal Cambiar Contraseña -->
+    <div id="changePasswordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Cambiar Contraseña</h3>
+                <button class="close-btn" onclick="closeChangePasswordModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <div class="form-group">
+                        <label for="currentPassword">Contraseña Actual</label>
+                        <input type="password" id="currentPassword" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="newPassword">Nueva Contraseña</label>
+                        <input type="password" id="newPassword" required minlength="6">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirmar Nueva Contraseña</label>
+                        <input type="password" id="confirmPassword" required>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeChangePasswordModal()">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Cambiar Contraseña
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Cambiar Email -->
+    <div id="changeEmailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Cambiar Email</h3>
+                <button class="close-btn" onclick="closeChangeEmailModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="changeEmailForm">
+                    <div class="form-group">
+                        <label for="newEmail">Nuevo Email</label>
+                        <input type="email" id="newEmail" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="passwordConfirm">Confirmar con Contraseña</label>
+                        <input type="password" id="passwordConfirm" required>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeChangeEmailModal()">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Cambiar Email
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script>
+        // Gestión del perfil
+        class ProfileManager {
+            constructor() {
+                this.user = null;
+                this.init();
+            }
+
+            init() {
+                this.loadUserData();
+                this.loadUserStats();
+                this.loadAchievements();
+                this.loadGameHistory();
+                this.bindEvents();
+            }
+
+            loadUserData() {
+                this.user = authManager.getCurrentUser();
+                
+                if (!this.user) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                // Actualizar información básica
+                document.getElementById('userName').textContent = this.user.nombre;
+                document.getElementById('userEmail').textContent = this.user.email;
+                
+                if (this.user.fecha_registro) {
+                    const joinDate = new Date(this.user.fecha_registro).toLocaleDateString('es-ES');
+                    document.getElementById('userJoinDate').innerHTML = `Miembro desde: <span>${joinDate}</span>`;
+                }
+
+                // Mostrar badge de invitado si corresponde
+                if (this.user.es_invitado) {
+                    document.getElementById('guestBadge').style.display = 'block';
+                    document.getElementById('accountSection').style.display = 'none';
+                }
+            }
+
+            loadUserStats() {
+                const victorias = this.user.victorias || 0;
+                const derrotas = this.user.derrotas || 0;
+                const partidas = victorias + derrotas;
+                const winrate = partidas > 0 ? Math.round((victorias / partidas) * 100) : 0;
+
+                document.getElementById('victoriasCount').textContent = victorias;
+                document.getElementById('derrotasCount').textContent = derrotas;
+                document.getElementById('partidasCount').textContent = partidas;
+                document.getElementById('winratePercent').textContent = winrate + '%';
+                document.getElementById('puntosCount').textContent = this.user.puntos_totales || 0;
+                document.getElementById('rankingPosition').textContent = this.user.ranking_posicion || '-';
+            }
+
+            async loadAchievements() {
+                // Simular carga de logros
+                const achievementsContainer = document.getElementById('achievementsList');
+                
+                setTimeout(() => {
+                    achievementsContainer.innerHTML = `
+                        <div class="achievement-card unlocked">
+                            <div class="achievement-icon">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="achievement-content">
+                                <h4>Primera Partida</h4>
+                                <p>Juega tu primera partida</p>
+                            </div>
+                        </div>
+                        
+                        <div class="achievement-card locked">
+                            <div class="achievement-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="achievement-content">
+                                <h4>Primera Victoria</h4>
+                                <p>Gana tu primera partida</p>
+                            </div>
+                        </div>
+                        
+                        <div class="achievement-card locked">
+                            <div class="achievement-icon">
+                                <i class="fas fa-fire"></i>
+                            </div>
+                            <div class="achievement-content">
+                                <h4>Racha de 5</h4>
+                                <p>Gana 5 partidas seguidas</p>
+                            </div>
+                        </div>
+                    `;
+                }, 1000);
+            }
+
+            async loadGameHistory() {
+                // Simular carga de historial
+                const historyContainer = document.getElementById('gameHistoryList');
+                
+                setTimeout(() => {
+                    historyContainer.innerHTML = `
+                        <div class="history-item">
+                            <div class="history-result win">Victoria</div>
+                            <div class="history-details">
+                                <p>Partida contra Bots</p>
+                                <span class="history-date">Hace 2 horas</span>
+                            </div>
+                            <div class="history-points">+150 pts</div>
+                        </div>
+                        
+                        <div class="history-item">
+                            <div class="history-result loss">Derrota</div>
+                            <div class="history-details">
+                                <p>Partida multijugador</p>
+                                <span class="history-date">Ayer</span>
+                            </div>
+                            <div class="history-points">+50 pts</div>
+                        </div>
+                    `;
+                }, 1500);
+            }
+
+            bindEvents() {
+                // Cambiar contraseña
+                document.getElementById('changePasswordBtn')?.addEventListener('click', () => {
+                    document.getElementById('changePasswordModal').style.display = 'flex';
+                });
+
+                // Cambiar email
+                document.getElementById('changeEmailBtn')?.addEventListener('click', () => {
+                    document.getElementById('changeEmailModal').style.display = 'flex';
+                });
+
+                // Formularios
+                document.getElementById('changePasswordForm')?.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.changePassword();
+                });
+
+                document.getElementById('changeEmailForm')?.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.changeEmail();
+                });
+            }
+
+            async changePassword() {
+                const currentPassword = document.getElementById('currentPassword').value;
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+
+                if (newPassword !== confirmPassword) {
+                    alert('Las contraseñas no coinciden');
+                    return;
+                }
+
+                // Aquí iría la lógica para cambiar contraseña
+                alert('Funcionalidad en desarrollo');
+                this.closeChangePasswordModal();
+            }
+
+            async changeEmail() {
+                const newEmail = document.getElementById('newEmail').value;
+                const password = document.getElementById('passwordConfirm').value;
+
+                // Aquí iría la lógica para cambiar email
+                alert('Funcionalidad en desarrollo');
+                this.closeChangeEmailModal();
+            }
+
+            closeChangePasswordModal() {
+                document.getElementById('changePasswordModal').style.display = 'none';
+                document.getElementById('changePasswordForm').reset();
+            }
+
+            closeChangeEmailModal() {
+                document.getElementById('changeEmailModal').style.display = 'none';
+                document.getElementById('changeEmailForm').reset();
+            }
+        }
+
+        // Funciones globales
+        function closeChangePasswordModal() {
+            profileManager.closeChangePasswordModal();
+        }
+
+        function closeChangeEmailModal() {
+            profileManager.closeChangeEmailModal();
+        }
+
+        // Inicializar cuando cargue la página
+        let profileManager;
+        document.addEventListener('DOMContentLoaded', () => {
+            profileManager = new ProfileManager();
+        });
+    </script>
+</body>
+</html>

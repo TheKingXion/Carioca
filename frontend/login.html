@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - Carioca Online</title>
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+    <div class="background-container">
+        <div class="login-container">
+            <div class="login-header">
+                <h1 class="login-title">🃏 Iniciar Sesión</h1>
+                <p class="login-subtitle">Bienvenido de vuelta a Carioca Online</p>
+            </div>
+
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="email" class="form-label">
+                        <span class="label-icon">📧</span>
+                        Email
+                    </label>
+                    <div class="input-container">
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            class="form-input" 
+                            placeholder="tu@email.com"
+                            required
+                            autocomplete="email"
+                        >
+                    </div>
+                    <div class="input-error" id="emailError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">
+                        <span class="label-icon">🔒</span>
+                        Contraseña
+                    </label>
+                    <div class="input-container password-container">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            class="form-input" 
+                            placeholder="Tu contraseña"
+                            required
+                            autocomplete="current-password"
+                        >
+                        <button type="button" class="password-toggle" onclick="togglePassword()">
+                            <span id="passwordToggleIcon">👁️</span>
+                        </button>
+                    </div>
+                    <div class="input-error" id="passwordError"></div>
+                </div>
+
+                <div class="form-options">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="rememberMe">
+                        <span class="checkmark"></span>
+                        Recordarme
+                    </label>
+                    <a href="#" class="forgot-password" onclick="olvidoPassword()">
+                        ¿Olvidaste tu contraseña?
+                    </a>
+                </div>
+
+                <button type="submit" class="login-btn" id="loginBtn">
+                    <span class="btn-text">Iniciar Sesión</span>
+                    <div class="btn-loader" id="loginLoader" style="display: none;">
+                        <div class="spinner"></div>
+                    </div>
+                </button>
+
+                <div class="form-divider">
+                    <span>o</span>
+                </div>
+
+                <div class="social-login">
+                    <button type="button" class="social-btn google disabled" onclick="loginGoogle()">
+                        <span class="social-icon">🔍</span>
+                        Google - Próximamente
+                    </button>
+                    <button type="button" class="social-btn facebook disabled" onclick="loginFacebook()">
+                        <span class="social-icon">📘</span>
+                        Facebook - Próximamente
+                    </button>
+                </div>
+
+                <div class="form-footer">
+                    <p class="register-text">¿No tienes cuenta? 
+                        <a href="register.html" class="register-link">Regístrate aquí</a>
+                    </p>
+                    <a href="index.html" class="back-home">← Volver al inicio</a>
+                </div>
+            </form>
+
+            <!-- Mensajes de estado -->
+            <div id="messageContainer" class="message-container" style="display: none;">
+                <div id="messageContent" class="message-content"></div>
+                <button class="message-close" onclick="cerrarMensaje()">×</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Efectos de partículas de fondo -->
+    <div class="particles-container" id="particles"></div>
+
+    <audio id="loginSound" preload="auto">
+        <source src="assets/musica/login_success.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="js/auth.js"></script>
+    <script>
+        // Variables globales
+        let isLoading = false;
+
+        // Inicializar página
+        document.addEventListener('DOMContentLoaded', function() {
+            inicializarLogin();
+            crearParticulas();
+            verificarSesionExistente();
+        });
+
+        function inicializarLogin() {
+            const form = document.getElementById('loginForm');
+            form.addEventListener('submit', handleLogin);
+
+            // Validación en tiempo real
+            document.getElementById('email').addEventListener('input', validarEmail);
+            document.getElementById('password').addEventListener('input', validarPassword);
+
+            // Efectos visuales en inputs
+            const inputs = document.querySelectorAll('.form-input');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.closest('.form-group').classList.add('focused');
+                });
+                
+                input.addEventListener('blur', function() {
+                    if (!this.value) {
+                        this.closest('.form-group').classList.remove('focused');
+                    }
+                });
+            });
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            
+            if (isLoading) return;
+            
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+
+            // Validaciones
+            if (!validarFormulario(email, password)) {
+                return;
+            }
+
+            mostrarCargando(true);
+
+            try {
+                const response = await fetch('http://localhost:5000/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Login exitoso
+                    const userData = {
+                        user_id: data.user_id,
+                        nombre: data.nombre,
+                        email: email,
+                        victorias: data.victorias,
+                        derrotas: data.derrotas
+                    };
+
+                    // Guardar datos del usuario
+                    if (rememberMe) {
+                        localStorage.setItem('carioca_user', JSON.stringify(userData));
+                    } else {
+                        sessionStorage.setItem('carioca_user', JSON.stringify(userData));
+                    }
+
+                    mostrarMensaje('¡Bienvenido de vuelta! 🎉', 'success');
+                    reproducirSonido();
+
+                    // Redirigir después de 1.5 segundos
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1500);
+
+                } else {
+                    // Error en login
+                    mostrarMensaje(data.error || 'Error al iniciar sesión', 'error');
+                    
+                    // Resaltar campos con error
+                    if (data.error.includes('encontrado')) {
+                        marcarError('email', 'Usuario no encontrado');
+                    } else if (data.error.includes('contraseña')) {
+                        marcarError('password', 'Contraseña incorrecta');
+                    }
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarMensaje('Error de conexión. Verifica tu internet.', 'error');
+            } finally {
+                mostrarCargando(false);
+            }
+        }
+
+        function validarFormulario(email, password) {
+            let esValido = true;
+
+            // Limpiar errores previos
+            limpiarErrores();
+
+            // Validar email
+            if (!email) {
+                marcarError('email', 'El email es obligatorio');
+                esValido = false;
+            } else if (!validarFormatoEmail(email)) {
+                marcarError('email', 'Formato de email inválido');
+                esValido = false;
+            }
+
+            // Validar contraseña
+            if (!password) {
+                marcarError('password', 'La contraseña es obligatoria');
+                esValido = false;
+            } else if (password.length < 6) {
+                marcarError('password', 'La contraseña debe tener al menos 6 caracteres');
+                esValido = false;
+            }
+
+            return esValido;
+        }
+
+        function validarEmail() {
+            const email = this.value.trim();
+            const emailError = document.getElementById('emailError');
+            
+            if (email && !validarFormatoEmail(email)) {
+                emailError.textContent = 'Formato de email inválido';
+                emailError.style.display = 'block';
+                this.classList.add('error');
+            } else {
+                emailError.style.display = 'none';
+                this.classList.remove('error');
+            }
+        }
+
+        function validarPassword() {
+            const password = this.value;
+            const passwordError = document.getElementById('passwordError');
+            
+            if (password && password.length < 6) {
+                passwordError.textContent = 'Mínimo 6 caracteres';
+                passwordError.style.display = 'block';
+                this.classList.add('error');
+            } else {
+                passwordError.style.display = 'none';
+                this.classList.remove('error');
+            }
+        }
+
+        function validarFormatoEmail(email) {
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return regex.test(email);
+        }
+
+        function marcarError(campo, mensaje) {
+            const input = document.getElementById(campo);
+            const error = document.getElementById(campo + 'Error');
+            
+            input.classList.add('error');
+            error.textContent = mensaje;
+            error.style.display = 'block';
+        }
+
+        function limpiarErrores() {
+            const inputs = document.querySelectorAll('.form-input');
+            const errors = document.querySelectorAll('.input-error');
+            
+            inputs.forEach(input => input.classList.remove('error'));
+            errors.forEach(error => {
+                error.style.display = 'none';
+                error.textContent = '';
+            });
+        }
+
+        function mostrarCargando(mostrar) {
+            isLoading = mostrar;
+            const btn = document.getElementById('loginBtn');
+            const btnText = btn.querySelector('.btn-text');
+            const loader = document.getElementById('loginLoader');
+            
+            if (mostrar) {
+                btn.disabled = true;
+                btn.classList.add('loading');
+                btnText.style.opacity = '0';
+                loader.style.display = 'block';
+            } else {
+                btn.disabled = false;
+                btn.classList.remove('loading');
+                btnText.style.opacity = '1';
+                loader.style.display = 'none';
+            }
+        }
+
+        function mostrarMensaje(mensaje, tipo) {
+            const container = document.getElementById('messageContainer');
+            const content = document.getElementById('messageContent');
+            
+            content.textContent = mensaje;
+            container.className = `message-container ${tipo}`;
+            container.style.display = 'block';
+            
+            // Auto-ocultar después de 5 segundos
+            setTimeout(() => {
+                if (container.style.display === 'block') {
+                    cerrarMensaje();
+                }
+            }, 5000);
+        }
+
+        function cerrarMensaje() {
+            document.getElementById('messageContainer').style.display = 'none';
+        }
+
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('passwordToggleIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.textContent = '🙈';
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.textContent = '👁️';
+            }
+        }
+
+        function verificarSesionExistente() {
+            const userData = localStorage.getItem('carioca_user') || sessionStorage.getItem('carioca_user');
+            if (userData) {
+                mostrarMensaje('Ya tienes una sesión activa. Redirigiendo...', 'info');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+            }
+        }
+
+        function reproducirSonido() {
+            const audio = document.getElementById('loginSound');
+            audio.volume = 0.3;
+            audio.play().catch(e => console.log('No se pudo reproducir el sonido'));
+        }
+
+        function crearParticulas() {
+            const container = document.getElementById('particles');
+            const numParticulas = 50;
+            
+            for (let i = 0; i < numParticulas; i++) {
+                const particula = document.createElement('div');
+                particula.className = 'particle';
+                particula.style.left = Math.random() * 100 + '%';
+                particula.style.animationDelay = Math.random() * 20 + 's';
+                particula.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                container.appendChild(particula);
+            }
+        }
+
+        // Funciones para login social (placeholder)
+        function loginGoogle() {
+            mostrarMensaje('Login con Google - Próximamente', 'info');
+        }
+
+        function loginFacebook() {
+            mostrarMensaje('Login con Facebook - Próximamente', 'info');
+        }
+
+        function olvidoPassword() {
+            mostrarMensaje('Recuperación de contraseña - Próximamente', 'info');
+        }
+
+        // Efectos de teclado
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !isLoading) {
+                const form = document.getElementById('loginForm');
+                form.dispatchEvent(new Event('submit'));
+            }
+        });
+    </script>
+</body>
+</html>

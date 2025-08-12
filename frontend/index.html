@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carioca Online - Juego de Cartas</title>
+    <link rel="stylesheet" href="css/index-interactive.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="main-header">
+            <div class="logo-animation">
+                <div class="card-animation">🃏</div>
+                <div class="card-animation">🂡</div>
+                <div class="card-animation">🂱</div>
+            </div>
+            <h1>🃏 Carioca Online</h1>
+            <p class="subtitle">El juego de cartas más emocionante</p>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <span class="stat-number">112</span>
+                    <span class="stat-label">Cartas</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">4</span>
+                    <span class="stat-label">Jugadores</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">7</span>
+                    <span class="stat-label">Contratos</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Menu -->
+        <main class="main-menu">
+            <div class="menu-buttons">
+                <button class="menu-option interactive-card" id="playBotsBtn" style="background: linear-gradient(135deg, #f39c12, #e67e22);">
+                    <div class="option-icon floating">🤖</div>
+                    <div class="option-title">Jugar Offline</div>
+                    <div class="option-subtitle">Contra bots inteligentes</div>
+                    <div class="interactive-glow"></div>
+                    <div class="pulse-effect"></div>
+                </button>
+                
+                <div class="menu-btn disabled-btn interactive-card">
+                    <div class="option-icon">🌐</div>
+                    <div class="option-title">Modo Online</div>
+                    <div class="option-subtitle">Próximamente</div>
+                    <div class="disabled-overlay">
+                        <span>🚧 En desarrollo</span>
+                    </div>
+                </div>
+                
+                <a href="login.html" class="menu-btn interactive-card" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);">
+                    <div class="option-icon floating">🔐</div>
+                    <div class="option-title">Iniciar Sesión</div>
+                    <div class="option-subtitle">Accede a tu cuenta</div>
+                    <div class="interactive-glow"></div>
+                </a>
+                
+                <a href="register.html" class="menu-btn interactive-card" style="background: linear-gradient(135deg, #1abc9c, #16a085);">
+                    <div class="option-icon floating">✨</div>
+                    <div class="option-title">Registrarse</div>
+                    <div class="option-subtitle">Crea tu cuenta</div>
+                    <div class="interactive-glow"></div>
+                </a>
+                
+                <a href="como-jugar.html" class="menu-btn interactive-card" style="background: linear-gradient(135deg, #3498db, #2980b9);">
+                    <div class="option-icon floating">�</div>
+                    <div class="option-title">Cómo Jugar</div>
+                    <div class="option-subtitle">Aprende las reglas</div>
+                    <div class="interactive-glow"></div>
+                </a>
+                
+                <a href="test-cartas.html" class="menu-btn interactive-card" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">
+                    <div class="option-icon floating">�</div>
+                    <div class="option-title">Test de Cartas</div>
+                    <div class="option-subtitle">Visualizar cartas</div>
+                    <div class="interactive-glow"></div>
+                </a>
+            </div>
+        </main>
+
+        <div class="footer-animation">
+            <div class="floating-cards">
+                <div class="floating-card">♠</div>
+                <div class="floating-card">♥</div>
+                <div class="floating-card">♦</div>
+                <div class="floating-card">♣</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script>
+        // Smooth scrolling para enlaces internos
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+
+    <!-- Modal de selección de dificultad para bots -->
+    <div id="botDifficultyModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Seleccionar Dificultad</h2>
+            <p>Elige el nivel de dificultad para tu partida contra bots:</p>
+            
+            <div class="difficulty-options">
+                <div class="difficulty-card" data-difficulty="facil">
+                    <div class="difficulty-icon">😊</div>
+                    <h3>Fácil</h3>
+                    <p>Los bots cometen errores frecuentes y juegan de forma básica. Ideal para aprender.</p>
+                    <ul>
+                        <li>• Estrategia simple</li>
+                        <li>• Errores frecuentes</li>
+                        <li>• Tiempo de respuesta rápido</li>
+                    </ul>
+                </div>
+                
+                <div class="difficulty-card" data-difficulty="normal">
+                    <div class="difficulty-icon">🙂</div>
+                    <h3>Normal</h3>
+                    <p>Los bots juegan de forma equilibrada con algunas estrategias avanzadas.</p>
+                    <ul>
+                        <li>• Estrategia balanceada</li>
+                        <li>• Algunos errores ocasionales</li>
+                        <li>• Buen desafío</li>
+                    </ul>
+                </div>
+                
+                <div class="difficulty-card" data-difficulty="dificil">
+                    <div class="difficulty-icon">😤</div>
+                    <h3>Difícil</h3>
+                    <p>Los bots juegan de forma muy inteligente y cometen pocos errores.</p>
+                    <ul>
+                        <li>• Estrategia avanzada</li>
+                        <li>• Errores mínimos</li>
+                        <li>• Máximo desafío</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="modal-actions">
+                <button id="cancelDifficultyBtn" class="btn-secondary">Cancelar</button>
+                <button id="startBotGameBtn" class="btn-primary" disabled>Iniciar Partida</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Funcionalidad del modal de dificultad
+        const botDifficultyModal = document.getElementById('botDifficultyModal');
+        const playBotsBtn = document.getElementById('playBotsBtn');
+        const closeModal = document.querySelector('.close-modal');
+        const cancelDifficultyBtn = document.getElementById('cancelDifficultyBtn');
+        const startBotGameBtn = document.getElementById('startBotGameBtn');
+        const difficultyCards = document.querySelectorAll('.difficulty-card');
+        
+        let selectedDifficulty = null;
+
+        playBotsBtn.addEventListener('click', () => {
+            botDifficultyModal.style.display = 'block';
+        });
+
+        closeModal.addEventListener('click', () => {
+            botDifficultyModal.style.display = 'none';
+            resetDifficultySelection();
+        });
+
+        cancelDifficultyBtn.addEventListener('click', () => {
+            botDifficultyModal.style.display = 'none';
+            resetDifficultySelection();
+        });
+
+        difficultyCards.forEach(card => {
+            card.addEventListener('click', () => {
+                // Remover selección anterior
+                difficultyCards.forEach(c => c.classList.remove('selected'));
+                
+                // Seleccionar nueva dificultad
+                card.classList.add('selected');
+                selectedDifficulty = card.dataset.difficulty;
+                startBotGameBtn.disabled = false;
+            });
+        });
+
+        startBotGameBtn.addEventListener('click', () => {
+            if (selectedDifficulty) {
+                // Redirigir a la página de juego con la dificultad seleccionada
+                window.location.href = `partida-bots.html?difficulty=${selectedDifficulty}`;
+            }
+        });
+
+        function resetDifficultySelection() {
+            difficultyCards.forEach(c => c.classList.remove('selected'));
+            selectedDifficulty = null;
+            startBotGameBtn.disabled = true;
+        }
+
+        // Cerrar modal al hacer clic fuera
+        window.addEventListener('click', (e) => {
+            if (e.target === botDifficultyModal) {
+                botDifficultyModal.style.display = 'none';
+                resetDifficultySelection();
+            }
+        });
+    </script>
+</body>
+</html>

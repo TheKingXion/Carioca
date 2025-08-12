@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lobby - Carioca Online</title>
+    <link rel="stylesheet" href="css/lobby.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+</head>
+<body>
+    <!-- Partículas de fondo -->
+    <div class="particles" id="particles"></div>
+    
+    <div class="lobby-container">
+        <!-- Header del Lobby -->
+        <header class="lobby-header">
+            <div class="header-left">
+                <div class="logo">
+                    <span class="logo-icon">🃏</span>
+                    <div class="logo-text">
+                        <h1>Carioca Online</h1>
+                        <p>Lobby Principal</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="header-center">
+                <div class="user-info-header">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <div class="user-details">
+                        <h3 id="userName">Usuario</h3>
+                        <div class="user-stats-mini">
+                            <span>🏆 <span id="userWins">0</span></span>
+                            <span>💔 <span id="userLosses">0</span></span>
+                            <span>⭐ Nivel <span id="userLevel">1</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <button class="header-btn" onclick="mostrarEstadisticas()">
+                    📊 Stats
+                </button>
+                <button class="header-btn" onclick="mostrarConfiguracion()">
+                    ⚙️ Config
+                </button>
+                <button class="header-btn" onclick="activarModoTest()">
+                    🧪 Test
+                </button>
+                <button class="header-btn danger" onclick="volverAlMenu()">
+                    🏠 Inicio
+                </button>
+            </div>
+        </header>
+
+        <!-- Sidebar - Crear Partida vs Bots -->
+        <aside class="lobby-sidebar">
+            <div class="sidebar-section">
+                <h3>🤖 Jugar vs Bots</h3>
+                
+                <div class="player-count-selector">
+                    <label class="section-label">👥 Número de jugadores totales:</label>
+                    <button class="player-btn" data-players="2" onclick="seleccionarJugadores(2)">2</button>
+                    <button class="player-btn active" data-players="3" onclick="seleccionarJugadores(3)">3</button>
+                    <button class="player-btn" data-players="4" onclick="seleccionarJugadores(4)">4</button>
+                </div>
+
+                <div class="game-type-info">
+                    <p class="info-text">� Modo: Solo vs Bots</p>
+                    <p class="info-subtext">Juega contra oponentes controlados por IA</p>
+                </div>
+
+                <div class="bot-config" id="botConfig">
+                    <h4>🤖 Configuración de Bots</h4>
+                    <div id="botConfigContainer">
+                        <!-- Se llena dinámicamente -->
+                    </div>
+                </div>
+
+                <div class="game-options">
+                    <div class="option-item">
+                        <input type="checkbox" id="modoRapido">
+                        <label for="modoRapido">⚡ Modo rápido (partidas más cortas)</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="ayudasVisibles" checked>
+                        <label for="ayudasVisibles">💡 Mostrar ayudas de juego</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="checkbox" id="sonidosActivados" checked>
+                        <label for="sonidosActivados">🔊 Efectos de sonido</label>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn-primary" onclick="crearPartidaVsBots()">
+                        🚀 Iniciar Partida
+                    </button>
+                    <button class="btn-secondary" onclick="partidaRapidaVsBots()">
+                        ⚡ Partida Rápida
+                    </button>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>🎯 Dificultad de Bots</h3>
+                
+                <div class="difficulty-selector">
+                    <button class="difficulty-btn active" data-difficulty="facil" onclick="seleccionarDificultad('facil')">
+                        <span class="difficulty-icon">😊</span>
+                        <span class="difficulty-name">Fácil</span>
+                        <span class="difficulty-desc">Bots principiantes</span>
+                    </button>
+                    <button class="difficulty-btn" data-difficulty="medio" onclick="seleccionarDificultad('medio')">
+                        <span class="difficulty-icon">😐</span>
+                        <span class="difficulty-name">Medio</span>
+                        <span class="difficulty-desc">Bots intermedios</span>
+                    </button>
+                    <button class="difficulty-btn" data-difficulty="dificil" onclick="seleccionarDificultad('dificil')">
+                        <span class="difficulty-icon">😤</span>
+                        <span class="difficulty-name">Difícil</span>
+                        <span class="difficulty-desc">Bots expertos</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="lobby-main">
+            <div class="main-header">
+                <h2>📊 Historial de Partidas</h2>
+                <div class="main-controls">
+                    <select id="filtroHistorial" onchange="filtrarHistorial()">
+                        <option value="todas">Todas las partidas</option>
+                        <option value="ganadas">Solo ganadas</option>
+                        <option value="perdidas">Solo perdidas</option>
+                        <option value="recientes">Más recientes</option>
+                    </select>
+                    <button class="btn-refresh" onclick="actualizarHistorial()">
+                        🔄 Actualizar
+                    </button>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <div class="stats-overview">
+                    <div class="stat-card">
+                        <div class="stat-icon">🎮</div>
+                        <div class="stat-content">
+                            <h3 id="totalPartidas">0</h3>
+                            <p>Partidas Jugadas</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🏆</div>
+                        <div class="stat-content">
+                            <h3 id="partidasGanadas">0</h3>
+                            <p>Victorias</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💔</div>
+                        <div class="stat-content">
+                            <h3 id="partidasPerdidas">0</h3>
+                            <p>Derrotas</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📈</div>
+                        <div class="stat-content">
+                            <h3 id="porcentajeVictorias">0%</h3>
+                            <p>% Victorias</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="games-history">
+                    <div class="history-header">
+                        <h3>🕒 Partidas Recientes</h3>
+                        <button class="btn-clear-history" onclick="limpiarHistorial()">
+                            🗑️ Limpiar Historial
+                        </button>
+                    </div>
+                    
+                    <div class="history-list" id="historialPartidas">
+                        <!-- Se llena dinámicamente con JavaScript -->
+                        <div class="no-games-message">
+                            <div class="no-games-icon">🎯</div>
+                            <h3>¡Comienza tu primera partida!</h3>
+                            <p>Crea una partida contra bots para empezar a jugar</p>
+                            <button class="btn-primary" onclick="partidaRapidaVsBots()">
+                                🚀 Jugar Ahora
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Información adicional del jugador -->
+        <aside class="lobby-info">
+            <div class="info-header">
+                <h3>🎯 Tu Progreso</h3>
+            </div>
+
+            <div class="progress-info">
+                <div class="level-progress">
+                    <div class="level-icon">⭐</div>
+                    <div class="level-details">
+                        <h4>Nivel <span id="nivelActual">1</span></h4>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="experienciaBar" style="width: 0%"></div>
+                        </div>
+                        <p><span id="expActual">0</span> / <span id="expSiguienteNivel">100</span> XP</p>
+                    </div>
+                </div>
+
+                <div class="achievements-preview">
+                    <h4>🏅 Logros Recientes</h4>
+                    <div class="achievements-list" id="logrosRecientes">
+                        <div class="no-achievements">
+                            <p>¡Juega para desbloquear logros!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tips-section">
+                    <h4>� Consejo del Día</h4>
+                    <div class="tip-card" id="consejoDelDia">
+                        <p>En el Carioca, es importante observar las cartas que descartan tus oponentes para saber qué juegos están armando.</p>
+                    </div>
+                </div>
+            </div>
+                    <span class="message">¡Bienvenido al lobby de Carioca Online! 🎉</span>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Escribe un mensaje..." maxlength="200">
+                <button class="chat-send" onclick="enviarMensaje()">📤</button>
+            </div>
+
+            <div class="players-online">
+                <h4>🎮 Jugadores Online</h4>
+                <div class="players-list" id="playersList">
+                    <!-- Se llena dinámicamente -->
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Modal de Estadísticas -->
+    <div id="statsModal" class="modal" style="display: none;">
+        <div class="modal-content stats-modal">
+            <div class="modal-header">
+                <h3>📊 Tus Estadísticas</h3>
+                <button class="modal-close" onclick="cerrarModal('statsModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">🏆</div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="statVictorias">0</span>
+                            <span class="stat-label">Victorias</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💔</div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="statDerrotas">0</span>
+                            <span class="stat-label">Derrotas</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📈</div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="statWinRate">0%</span>
+                            <span class="stat-label">% Victorias</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⭐</div>
+                        <div class="stat-info">
+                            <span class="stat-number" id="statNivel">1</span>
+                            <span class="stat-label">Nivel</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contratos-progress">
+                    <h4>🎯 Progreso por Contratos</h4>
+                    <div class="contratos-grid" id="contratosGrid">
+                        <!-- Se llena dinámicamente -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Configuración -->
+    <div id="configModal" class="modal" style="display: none;">
+        <div class="modal-content config-modal">
+            <div class="modal-header">
+                <h3>⚙️ Configuración</h3>
+                <button class="modal-close" onclick="cerrarModal('configModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="config-section">
+                    <h4>🔊 Audio</h4>
+                    <div class="config-option">
+                        <label>Volumen Música:</label>
+                        <input type="range" id="volumenMusica" min="0" max="100" value="50">
+                        <span id="volumenMusicaValue">50%</span>
+                    </div>
+                    <div class="config-option">
+                        <label>Volumen Efectos:</label>
+                        <input type="range" id="volumenEfectos" min="0" max="100" value="70">
+                        <span id="volumenEfectosValue">70%</span>
+                    </div>
+                </div>
+
+                <div class="config-section">
+                    <h4>🎨 Apariencia</h4>
+                    <div class="config-option">
+                        <label>Tema:</label>
+                        <select id="temaVisual">
+                            <option value="auto">🌓 Automático</option>
+                            <option value="claro">☀️ Claro</option>
+                            <option value="oscuro">🌙 Oscuro</option>
+                        </select>
+                    </div>
+                    <div class="config-option">
+                        <label class="checkbox-option">
+                            <input type="checkbox" id="animacionesHabilitadas" checked>
+                            <span>✨ Animaciones habilitadas</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="config-actions">
+                    <button class="config-btn save" onclick="guardarConfiguracion()">
+                        💾 Guardar
+                    </button>
+                    <button class="config-btn reset" onclick="resetearConfiguracion()">
+                        🔄 Resetear
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Modo Test -->
+    <div id="testModal" class="modal" style="display: none;">
+        <div class="modal-content test-modal">
+            <div class="modal-header">
+                <h3>🧪 Modo de Prueba</h3>
+                <button class="modal-close" onclick="cerrarModal('testModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="test-section">
+                    <h4>🎮 Probar Funcionalidades</h4>
+                    <div class="test-buttons">
+                        <button class="test-btn" onclick="testearLogin()">
+                            🔐 Probar Login
+                        </button>
+                        <button class="test-btn" onclick="testearRegistro()">
+                            📝 Probar Registro
+                        </button>
+                        <button class="test-btn" onclick="testearChat()">
+                            💬 Probar Chat
+                        </button>
+                        <button class="test-btn" onclick="testearSalas()">
+                            🏠 Probar Salas
+                        </button>
+                        <button class="test-btn" onclick="testearJuego()">
+                            🃏 Probar Juego
+                        </button>
+                    </div>
+                </div>
+
+                <div class="test-section">
+                    <h4>🤖 Crear Partida de Prueba</h4>
+                    <div class="test-game-options">
+                        <select id="testGameType">
+                            <option value="solo">Solo (con bots)</option>
+                            <option value="tutorial">Tutorial interactivo</option>
+                            <option value="demo">Demo automática</option>
+                        </select>
+                        <button class="test-btn primary" onclick="crearPartidaPrueba()">
+                            🚀 Crear Partida de Prueba
+                        </button>
+                    </div>
+                </div>
+
+                <div class="test-section">
+                    <h4>📊 Estado del Sistema</h4>
+                    <div class="system-status">
+                        <div class="status-item">
+                            <span class="status-label">Servidor:</span>
+                            <span class="status-value" id="serverStatus">🟢 Conectado</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Base de Datos:</span>
+                            <span class="status-value" id="dbStatus">🟢 Activa</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">WebSocket:</span>
+                            <span class="status-value" id="wsStatus">🟢 Conectado</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Creando Partida -->
+    <div id="creandoPartidaModal" class="modal" style="display: none;">
+        <div class="modal-content creating-modal">
+            <div class="modal-body">
+                <div class="creating-animation">
+                    <div class="cards-animation">
+                        <div class="card-flip"></div>
+                        <div class="card-flip"></div>
+                        <div class="card-flip"></div>
+                    </div>
+                    <h3>🎴 Creando Partida...</h3>
+                    <p>Preparando las cartas y configurando la mesa</p>
+                    <div class="creating-progress">
+                        <div class="progress-bar" id="creatingProgress"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/lobby-bots.js"></script>
+</body>
+</html>

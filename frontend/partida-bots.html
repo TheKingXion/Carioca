@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carioca Online - Partida contra Bots</title>
+    <link rel="stylesheet" href="css/partida-bots.css">
+    <link rel="stylesheet" href="css/cards.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Header del juego -->
+        <div class="game-header">
+            <div class="game-info">
+                <h1>Carioca vs Bots</h1>
+                <div class="difficulty-badge" id="difficultyBadge">
+                    <span id="difficultyLevel">Normal</span>
+                </div>
+            </div>
+            <div class="game-controls">
+                <button id="toggleInfoPanelBtn" class="control-btn">📊 Info</button>
+                <button id="pauseBtn" class="control-btn">⏸️ Pausar</button>
+                <button id="exitBtn" class="control-btn danger">🚪 Salir</button>
+            </div>
+        </div>
+
+        <!-- Mesa de juego -->
+        <div class="game-table">
+            <!-- Bot superior -->
+            <div class="bot-top" id="bot1">
+                <div class="player-info">
+                    <div class="player-avatar">🤖</div>
+                    <div class="player-name">Roberto</div>
+                    <div class="player-cards-count">11 cartas</div>
+                </div>
+                <div class="bot-hand horizontal">
+                    <!-- Las cartas de los bots se mostrarán boca abajo -->
+                </div>
+            </div>
+
+            <!-- Fila central: Bot izquierdo + Centro + Bot derecho -->
+            <div class="middle-row">
+                <!-- Bot izquierdo -->
+                <div class="bot-left" id="bot2">
+                    <div class="player-info vertical">
+                        <div class="player-avatar">🤖</div>
+                        <div class="player-name">Viejo Amanerao</div>
+                        <div class="player-cards-count">12 cartas</div>
+                    </div>
+                    <div class="bot-hand vertical-left">
+                        <!-- Las cartas de los bots se mostrarán boca abajo -->
+                    </div>
+                </div>
+
+                <!-- Área central de la mesa -->
+                <div class="table-center">
+                    <!-- Mazo y descarte -->
+                    <div class="deck-area">
+                        <div class="deck-pile" id="deckPile">
+                            <div class="card-back">🃠</div>
+                            <div class="deck-count">98</div>
+                        </div>
+                        <div class="discard-pile" id="discardPile">
+                            <div class="empty-pile">Descarte</div>
+                        </div>
+                    </div>
+
+                    <!-- Área de juegos (combinaciones) -->
+                    <div class="played-cards-area" id="playedCardsArea">
+                        <div class="empty-played-cards">
+                            <p>Las combinaciones aparecerán aquí</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bot derecho -->
+                <div class="bot-right" id="bot3">
+                    <div class="player-info vertical">
+                        <div class="player-avatar">🤖</div>
+                        <div class="player-name">Papá</div>
+                        <div class="player-cards-count">11 cartas</div>
+                    </div>
+                    <div class="bot-hand vertical-right">
+                        <!-- Las cartas de los bots se mostrarán boca abajo -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Área del jugador (abajo) -->
+            <div class="player-area">
+                <div class="player-info">
+                    <div class="player-avatar">👤</div>
+                    <div class="player-name">Tú</div>
+                    <div class="current-contract" id="currentContract">
+                        Contrato 1: 2 tríos
+                    </div>
+                </div>
+                
+                <!-- Mano del jugador -->
+                <div class="player-hand" id="playerHand">
+                    <!-- Las cartas del jugador se generarán aquí -->
+                </div>
+
+                <!-- Acciones del jugador -->
+                <div class="player-actions">
+                    <button id="sortHandBtn" class="action-btn">🔄 Ordenar</button>
+                    <button id="layDownBtn" class="action-btn" disabled>⬇️ Bajar</button>
+                    <button id="extendBtn" class="action-btn" disabled>➕ Rellenar</button>
+                    <button id="makePlayBtn" class="action-btn" disabled>🎯 Jugar</button>
+                    <button id="discardBtn" class="action-btn" disabled>🗑️ Descartar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel de información (desplegable) -->
+        <div class="info-panel">
+            <button id="closeInfoPanelBtn" class="close-info-btn" title="Cerrar">✖</button>
+            <div class="game-status" id="gameStatus">
+                <h3>Estado del Juego</h3>
+                <p>Turno: <span id="currentPlayer">Tu turno</span></p>
+                <p>Contrato actual: <span id="contractInfo">2 tríos</span></p>
+                <p>Cartas en mazo: <span id="deckCardsCount">98</span></p>
+            </div>
+
+            <div class="contracts-info">
+                <h3>Contratos Carioca</h3>
+                <div class="contract-list">
+                    <div class="contract-item active">1. 2 tríos</div>
+                    <div class="contract-item">2. 1 trío + 1 escalera</div>
+                    <div class="contract-item">3. 2 escaleras</div>
+                    <div class="contract-item">4. 3 tríos</div>
+                    <div class="contract-item">5. 2 tríos + 1 escalera</div>
+                    <div class="contract-item">6. 1 trío + 2 escaleras</div>
+                    <div class="contract-item">7. 3 escaleras</div>
+                    <div class="contract-item">8. Escala Real (13 cartas)</div>
+                    <div class="contract-item">9. Escala Falsa (13 cartas)</div>
+                </div>
+            </div>
+
+            <div class="scores-info">
+                <h3>Puntajes</h3>
+                <div id="scoreBoard" class="score-board">
+                    <!-- Puntajes dinámicos -->
+                </div>
+                <div id="lastRoundScores" class="last-round-scores" style="margin-top:10px;font-size:0.85em;color:#bdc3c7;">
+                    <!-- Resumen última ronda -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de pausa -->
+        <div id="pauseModal" class="modal">
+            <div class="modal-content">
+                <h2>Juego Pausado</h2>
+                <div class="pause-actions">
+                    <button id="resumeBtn" class="btn-primary">Continuar</button>
+                    <button id="restartBtn" class="btn-secondary">Reiniciar</button>
+                    <button id="quitBtn" class="btn-danger">Salir al Menú</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de salida -->
+        <div id="exitModal" class="modal">
+            <div class="modal-content">
+                <h2>¿Seguro que quieres salir?</h2>
+                <p>Se perderá el progreso de la partida actual.</p>
+                <div class="exit-actions">
+                    <button id="confirmExitBtn" class="btn-danger">Sí, salir</button>
+                    <button id="cancelExitBtn" class="btn-secondary">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/partida-bots.js"></script>
+    <!-- Audios de derrota por bot (reemplaza los src con rutas reales) -->
+    <audio id="botLose_viejo" src="sounds/bot_viejo_lose.mp3" preload="auto"></audio>
+    <audio id="botLose_roberto" src="sounds/bot_roberto_lose.mp3" preload="auto"></audio>
+    <audio id="botLose_papa" src="sounds/bot_papa_lose.mp3" preload="auto"></audio>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cómo Jugar - Carioca Online</title>
+    <link rel="stylesheet" href="css/como-jugar.css">
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-btn">
+            ← Volver al Menú Principal
+        </a>
+
+        <div class="header">
+            <h1>🃏 Cómo Jugar Carioca 🃏</h1>
+            <p>Aprende todas las reglas y estrategias del juego de cartas más emocionante</p>
+        </div>
+
+        <div class="content-grid">
+            <!-- Introducción -->
+            <div class="section">
+                <h2><span class="icon">🎯</span>Objetivo del Juego</h2>
+                <div class="highlight">
+                    <p><strong>El objetivo principal es ser el primer jugador en quedarse sin cartas en la mano</strong>, formando combinaciones válidas con las cartas y descartando estratégicamente.</p>
+                </div>
+                <p>Carioca es un juego de cartas que combina estrategia, suerte y habilidad. Cada partida es única y emocionante, donde debes formar combinaciones específicas para ganar.</p>
+            </div>
+
+            <!-- Preparación -->
+            <div class="section">
+                <h2><span class="icon">🎴</span>Preparación del Juego</h2>
+                
+                <h3>Cartas Utilizadas</h3>
+                <ul>
+                    <li><strong>2 mazos completos de 52 cartas cada uno</strong> (104 cartas)</li>
+                    <li><strong>8 comodines (Jokers)</strong> - 4 por cada mazo</li>
+                    <li><strong>Total: 112 cartas</strong></li>
+                </ul>
+
+                <h3>Distribución Inicial</h3>
+                <ul>
+                    <li><strong>Cada jugador recibe 11 cartas</strong></li>
+                    <li><strong>1 carta se coloca boca arriba</strong> (pila de descarte)</li>
+                    <li><strong>Las cartas restantes forman el mazo</strong> (pila para robar)</li>
+                </ul>
+
+                <div class="tip">
+                    <strong>💡 Consejo:</strong> Al inicio, organiza tus cartas por palos y valores para identificar mejor las posibles combinaciones.
+                </div>
+            </div>
+
+            <!-- Combinaciones -->
+            <div class="section">
+                <h2><span class="icon">🔗</span>Combinaciones Válidas</h2>
+                
+                <h3>1. Escalera (Secuencia)</h3>
+                <p>Tres o más cartas consecutivas del mismo palo:</p>
+                <div class="example-cards">
+                    <div class="card corazones">4♥</div>
+                    <div class="card corazones">5♥</div>
+                    <div class="card corazones">6♥</div>
+                    <div class="card corazones">7♥</div>
+                </div>
+                
+                <h3>2. Grupo (Tercia o Pierna)</h3>
+                <p>Tres o más cartas del mismo valor (diferentes palos):</p>
+                <div class="example-cards">
+                    <div class="card espadas">K♠</div>
+                    <div class="card corazones">K♥</div>
+                    <div class="card diamantes">K♦</div>
+                </div>
+
+                <h3>3. Uso de Comodines (Jokers)</h3>
+                <p>Los comodines pueden reemplazar cualquier carta:</p>
+                <div class="example-cards">
+                    <div class="card espadas">9♠</div>
+                    <div class="card joker">🃏</div>
+                    <div class="card espadas">J♠</div>
+                </div>
+                <p class="tip">El comodín representa el 10♠ en esta escalera</p>
+
+                <div class="warning">
+                    <strong>⚠️ Importante:</strong> Las combinaciones deben tener mínimo 3 cartas. No se permiten combinaciones de solo 2 cartas.
+                </div>
+            </div>
+
+            <!-- Desarrollo del Juego -->
+            <div class="section">
+                <h2><span class="icon">🔄</span>Desarrollo del Juego</h2>
+                
+                <div class="steps">
+                    <div class="step">
+                        <h3>Robar una Carta</h3>
+                        <p>Al inicio de tu turno, debes robar una carta del mazo o tomar la carta superior de la pila de descarte.</p>
+                    </div>
+
+                    <div class="step">
+                        <h3>Formar Combinaciones (Opcional)</h3>
+                        <p>Si tienes combinaciones válidas en tu mano, puedes bajarlas a la mesa. Una vez bajadas, quedan públicas para todos los jugadores.</p>
+                    </div>
+
+                    <div class="step">
+                        <h3>Agregar a Combinaciones Existentes (Opcional)</h3>
+                        <p>Puedes agregar cartas a tus propias combinaciones ya bajadas o a las de otros jugadores.</p>
+                    </div>
+
+                    <div class="step">
+                        <h3>Descartar</h3>
+                        <p>Al final de tu turno, debes descartar una carta colocándola boca arriba en la pila de descarte.</p>
+                    </div>
+                </div>
+
+                <div class="tip">
+                    <strong>💡 Estrategia:</strong> Observa las cartas que descartan otros jugadores para saber qué combinaciones están formando.
+                </div>
+            </div>
+
+            <!-- Condiciones de Victoria -->
+            <div class="section">
+                <h2><span class="icon">🏆</span>Cómo Ganar</h2>
+                
+                <div class="highlight">
+                    <h3>Condición de Victoria</h3>
+                    <p>Para ganar, debes quedarte sin cartas en la mano. Esto se logra cuando:</p>
+                    <ul>
+                        <li>Has bajado todas tus combinaciones válidas</li>
+                        <li>Has agregado las cartas restantes a combinaciones existentes</li>
+                        <li>Descartas tu última carta</li>
+                    </ul>
+                </div>
+
+                <h3>Reglas Especiales para Ganar</h3>
+                <ul>
+                    <li><strong>Debes tener al menos una combinación bajada</strong> antes de poder ganar</li>
+                    <li><strong>Puedes ganar descartando</strong> tu última carta</li>
+                    <li><strong>Puedes ganar sin descartar</strong> si logras bajar/agregar todas tus cartas</li>
+                </ul>
+
+                <div class="warning">
+                    <strong>⚠️ Regla Importante:</strong> No puedes ganar si no has bajado ninguna combinación propia durante la partida.
+                </div>
+            </div>
+
+            <!-- Puntuación -->
+            <div class="section">
+                <h2><span class="icon">📊</span>Sistema de Puntuación</h2>
+                
+                <table class="rules-table">
+                    <thead>
+                        <tr>
+                            <th>Carta</th>
+                            <th>Puntos</th>
+                            <th>Observaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>As (A)</td>
+                            <td>15 puntos</td>
+                            <td>Puede ser 1 o 14 en escaleras</td>
+                        </tr>
+                        <tr>
+                            <td>Figuras (J, Q, K)</td>
+                            <td>10 puntos</td>
+                            <td>Jack, Queen, King</td>
+                        </tr>
+                        <tr>
+                            <td>Números (2-10)</td>
+                            <td>Valor nominal</td>
+                            <td>2=2pts, 3=3pts, ..., 10=10pts</td>
+                        </tr>
+                        <tr>
+                            <td>Comodín (Joker)</td>
+                            <td>25 puntos</td>
+                            <td>Mayor penalización</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="tip">
+                    <strong>💡 Nota:</strong> Los puntos se cuentan negativamente. El ganador obtiene 0 puntos, los demás suman los puntos de las cartas que les quedaron en la mano.
+                </div>
+            </div>
+
+            <!-- Estrategias -->
+            <div class="section">
+                <h2><span class="icon">🧠</span>Estrategias y Consejos</h2>
+                
+                <h3>Estrategias Básicas</h3>
+                <ul>
+                    <li><strong>Observa los descartes:</strong> Fíjate en qué cartas descartan otros jugadores para saber qué necesitan</li>
+                    <li><strong>Maneja los comodines sabiamente:</strong> No los uses prematuramente, pueden ser muy valiosos</li>
+                    <li><strong>Forma combinaciones largas:</strong> Es mejor tener pocas combinaciones grandes que muchas pequeñas</li>
+                    <li><strong>Controla las cartas altas:</strong> As, figuras y comodines valen muchos puntos si te quedas con ellas</li>
+                </ul>
+
+                <h3>Estrategias Avanzadas</h3>
+                <ul>
+                    <li><strong>Bloqueo:</strong> A veces conviene guardar una carta que sabes que otro jugador necesita</li>
+                    <li><strong>Timing:</strong> Saber cuándo bajar combinaciones y cuándo esperar es crucial</li>
+                    <li><strong>Memoria:</strong> Recuerda qué cartas han salido para calcular probabilidades</li>
+                    <li><strong>Flexibilidad:</strong> Mantén múltiples opciones de combinaciones abiertas</li>
+                </ul>
+
+                <div class="highlight">
+                    <strong>🎯 Consejo de Experto:</strong> No te apresures a bajar combinaciones pequeñas. A veces es mejor esperar para formar combinaciones más grandes y eficientes.
+                </div>
+            </div>
+
+            <!-- Variantes -->
+            <div class="section">
+                <h2><span class="icon">🎲</span>Variantes del Juego</h2>
+                
+                <h3>Carioca Clásico</h3>
+                <p>La versión tradicional que acabamos de explicar.</p>
+                
+                <h3>Carioca por Contratos</h3>
+                <p>Cada mano tiene objetivos específicos que debes cumplir:</p>
+                <ul>
+                    <li><strong>Mano 1:</strong> 2 grupos de 3</li>
+                    <li><strong>Mano 2:</strong> 1 grupo de 3 + 1 escalera de 4</li>
+                    <li><strong>Mano 3:</strong> 2 escaleras de 4</li>
+                    <li><strong>Y así sucesivamente...</strong></li>
+                </ul>
+
+                <h3>Carioca Express</h3>
+                <p>Versión más rápida con menos cartas por jugador (7 en lugar de 11).</p>
+            </div>
+
+            <!-- Etiqueta del Juego -->
+            <div class="section">
+                <h2><span class="icon">🤝</span>Etiqueta y Fair Play</h2>
+                
+                <ul>
+                    <li><strong>Respeta los turnos:</strong> No te adelantes al turno de otros jugadores</li>
+                    <li><strong>Sé honesto:</strong> Si cometes un error, admítelo</li>
+                    <li><strong>Mantén las cartas ocultas:</strong> No muestres tus cartas a otros jugadores</li>
+                    <li><strong>Juega a buen ritmo:</strong> No hagas esperar demasiado a los demás</li>
+                    <li><strong>Sé buen ganador y buen perdedor:</strong> Disfruta el juego independientemente del resultado</li>
+                </ul>
+
+                <div class="tip">
+                    <strong>🌟 Recuerda:</strong> El Carioca es un juego social. La diversión y el respeto mutuo son más importantes que ganar.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Efecto de scroll suave para navegación interna
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Animación de entrada para las secciones
+        const sections = document.querySelectorAll('.section');
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
